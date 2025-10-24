@@ -27,8 +27,8 @@ socket.addEventListener("open", () => {
         params: [
           `path_or_hex=${canvasToHex(
             combineCanvases({
-			  tl: emoji("🦖"),
-              br: makeSmallClock(...nums),
+              tl: emoji("🦖"),
+              br: clock(...nums),
               tr: day(),
             }),
           )}`,
@@ -42,38 +42,8 @@ socket.addEventListener("message", (event) => {
   console.log("Message from server:", event.data);
 });
 
-function makeClock(...nums: number[]) {
-  // Image dimensions
-  const width = 64;
-  const height = 16;
 
-  // Create a canvas and fill red
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "green";
-  canvas.loadFont(Deno.readFileSync("./lcd.14.otf"), {
-    family: "digital-7",
-  });
-  const fontSize = 20;
-  ctx.font = `${fontSize}px digital-7`;
-
-  const yOffset = 16;
-  ctx.fillText(nums[0].toString(), -2, yOffset);
-  ctx.fillText(nums[1].toString(), 14, yOffset);
-  ctx.fillText(nums[2].toString(), 36, yOffset);
-  ctx.fillText(nums[3].toString(), 51, yOffset);
-
-  ctx.fillRect(30, 3, 4, 4);
-  ctx.fillRect(30, 9, 4, 4);
-
-  // Get PNG buffer
-  const hex = encodeHex(canvas.toBuffer("image/png"));
-  //save to file for debugging
-  Deno.writeFileSync("debug.png", canvas.toBuffer("image/png"));
-  return hex;
-}
-
-function makeSmallClock(...nums: number[]) {
+function clock(...nums: number[]) {
   // Image dimensions
   const width = 32;
   const height = 8;
@@ -99,9 +69,6 @@ function makeSmallClock(...nums: number[]) {
   ctx.fillRect(15, 1, 2, 2);
   ctx.fillRect(15, 5, 2, 2);
 
-  // Get PNG buffer
-  // const hex = encodeHex(canvas.toBuffer("image/png"));
-  //save to file for debugging
   return canvas;
 }
 
@@ -159,6 +126,6 @@ function emoji(emoji: string) {
   ctx.fillStyle = "green";
   const fontSize = 14;
   ctx.font = `${fontSize}px Apple Color Emoji`;
-  ctx.fillText(emoji, 8, fontSize-1);
+  ctx.fillText(emoji, 8, fontSize - 1);
   return canvas;
 }
