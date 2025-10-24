@@ -44,6 +44,12 @@ socket.addEventListener("message", (event) => {
   console.log("Message from server:", event.data);
 });
 
+socket.addEventListener("close", () => {
+  console.log("WebSocket connection closed.");
+
+  Deno.exit();
+});
+
 function clock(...nums: number[]) {
   // Image dimensions
   const width = 32;
