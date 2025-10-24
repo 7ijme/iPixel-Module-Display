@@ -35,7 +35,7 @@ socket.addEventListener("open", () => {
         ],
       }),
     );
-  }, 1000);
+  }, 5000);
 });
 
 socket.addEventListener("message", (event) => {
