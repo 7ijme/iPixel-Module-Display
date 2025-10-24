@@ -1,5 +1,5 @@
 // Create a WebSocket connection
-const socket = new WebSocket("ws://localhost:3000");
+let socket = new WebSocket("ws://localhost:3000");
 
 import { encodeHex } from "jsr:@std/encoding/hex";
 import {
@@ -42,6 +42,11 @@ function render() {
 
 socket.addEventListener("message", (event) => {
   console.log("Message from server:", event.data);
+
+  if (event.type === "error") {
+    socket.close();
+    socket = new WebSocket("ws://localhost:3000");
+  }
 });
 
 socket.addEventListener("close", () => {
