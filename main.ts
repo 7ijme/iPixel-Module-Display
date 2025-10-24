@@ -9,39 +9,40 @@ import {
 
 socket.addEventListener("open", () => {
   console.log("WebSocket connection established.");
-  setInterval(() => {
-    // get time
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-
-    const nums = [
-      Math.floor(hours / 10),
-      hours % 10,
-      Math.floor(minutes / 10),
-      minutes % 10,
-    ];
-    socket.send(
-      JSON.stringify({
-        command: "send_png",
-        params: [
-          `path_or_hex=${canvasToHex(
-            combineCanvases({
-              tl: emoji("🦖"),
-              br: clock(...nums),
-              tr: day(),
-            }),
-          )}`,
-        ],
-      }),
-    );
-  }, 5000);
+  render();
+  setInterval(render, 5000);
 });
+
+function render() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+
+  const nums = [
+    Math.floor(hours / 10),
+    hours % 10,
+    Math.floor(minutes / 10),
+    minutes % 10,
+  ];
+  socket.send(
+    JSON.stringify({
+      command: "send_png",
+      params: [
+        `path_or_hex=${canvasToHex(
+          combineCanvases({
+            tl: emoji("🦖"),
+            br: clock(...nums),
+            tr: day(),
+          }),
+        )}`,
+      ],
+    }),
+  );
+}
 
 socket.addEventListener("message", (event) => {
   console.log("Message from server:", event.data);
 });
-
 
 function clock(...nums: number[]) {
   // Image dimensions
